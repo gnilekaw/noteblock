@@ -18,4 +18,11 @@ defmodule Noteblock.Block do
     |> cast(params, [:hash, :previous_hash, :data, :originating_block])
     |> validate_required([:hash, :previous_hash, :data, :originating_block])
   end
+
+  @doc """
+  Gets the last block from the chain.
+  """
+  def last(query) do
+    from n in query, order_by: [desc: n.id], limit: 1
+  end
 end

@@ -9,12 +9,12 @@ defmodule Noteblock.BlockController do
   end
 
   def new(conn, _params) do
-    previous_block = get_last_block()
+    last_block = Block |> Block.last |> Repo.one
 
-    new_hash = create_new_hash(previous_block)
+    new_hash = create_new_hash(last_block)
 
     changeset = Block.changeset(%Block{
-      previous_hash: Map.get(previous_block, :hash),
+      previous_hash: Map.get(last_block, :hash),
       hash: new_hash,
       originating_block: new_hash
     })
@@ -46,12 +46,12 @@ defmodule Noteblock.BlockController do
   def delete(conn, %{"id" => id}) do
     block = Repo.get! Block, id
     parent_data = Map.get block, :data
-    previous_block = get_last_block()
+    last_block = Block |> Block.last |> Repo.one
 
     changeset = Block.changeset(%Block{
       originating_block: Map.get(block, :hash),
-      previous_hash: Map.get(previous_block, :hash),
-      hash: create_new_hash(previous_block),
+      previous_hash: Map.get(last_block, :hash),
+      hash: create_new_hash(last_block),
       data: %{
         action: "delete",
         number: Map.get(parent_data, "number"),
@@ -67,11 +67,6 @@ defmodule Noteblock.BlockController do
       {:error, changeset} ->
         render(conn, "edit.html", block: block, changeset: changeset)
     end
-  end
-
-  defp get_last_block do
-    query = from n in Block, order_by: [desc: n.id], limit: 1
-    Repo.one(query)
   end
 
   defp create_new_hash(block) do
