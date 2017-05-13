@@ -18,4 +18,14 @@ defmodule Noteblock.Hash do
   def sha256(string) do
     :crypto.hash(:sha256, string) |> Base.encode16
   end
+
+  @doc """
+    Creates a shasum from a JSON-encoded block.
+  """
+  def new(block) do
+    [:hash, :data, :originating_block, :inserted_at]
+    |> Enum.map(&(Map.get block, &1))
+    |> Poison.encode
+    |> sha256
+  end
 end

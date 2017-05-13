@@ -11,12 +11,12 @@ defmodule Noteblock.BlockController do
   def new(conn, _params) do
     last_block = Block |> Block.last |> Repo.one
 
-    new_hash = create_new_hash(last_block)
+    new_hash = Hash.new(last_block)
 
     changeset = Block.changeset(%Block{
+      originating_block: new_hash,
       previous_hash: Map.get(last_block, :hash),
-      hash: new_hash,
-      originating_block: new_hash
+      hash: new_hash
     })
 
     render(conn, "new.html", changeset: changeset)
@@ -51,7 +51,7 @@ defmodule Noteblock.BlockController do
     changeset = Block.changeset(%Block{
       originating_block: Map.get(block, :hash),
       previous_hash: Map.get(last_block, :hash),
-      hash: create_new_hash(last_block),
+      hash: Hash.new(last_block),
       data: %{
         action: "delete",
         number: Map.get(parent_data, "number"),
@@ -67,16 +67,5 @@ defmodule Noteblock.BlockController do
       {:error, changeset} ->
         render(conn, "edit.html", block: block, changeset: changeset)
     end
-  end
-
-  defp create_new_hash(block) do
-    [
-      Map.get(block, :hash),
-      Map.get(block, :data),
-      Map.get(block, :originating_block),
-      Map.get(block, :inserted_at)
-    ]
-      |> Poison.encode
-      |> Hash.sha256
   end
 end
