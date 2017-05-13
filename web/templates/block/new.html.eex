@@ -1,0 +1,6 @@
+<h2>New block</h2>
+
+<%= render "form.html", changeset: @changeset,
+                        action: block_path(@conn, :create) %>
+
+<%= link "Back", to: block_path(@conn, :index) %>

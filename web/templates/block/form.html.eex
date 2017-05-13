@@ -1,0 +1,29 @@
+
+<%= form_for @changeset, @action, fn f -> %>
+  <%= if @changeset.action do %>
+    <div class="alert alert-danger">
+      <p>Oops, something went wrong! Please check the errors below.</p>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= label :data, :number, class: "control-label" %>
+    <%= number_input :data, :number %>
+  </div>
+
+  <div class="form-group">
+    <%= label :data, :note, class: "control-label" %>
+    <%= textarea :data, :note %>
+  </div>
+
+  <div class="form-group">
+    <%= hidden_input f, :originating_block %>
+    <%= error_tag f, :originating_block %>
+    <%= hidden_input f, :hash %>
+    <%= error_tag f, :hash %>
+    <%= hidden_input f, :previous_hash %>
+    <%= error_tag f, :previous_hash %>
+
+    <%= submit "Submit", class: "btn btn-primary" %>
+  </div>
+<% end %>

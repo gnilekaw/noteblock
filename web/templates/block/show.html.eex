@@ -1,0 +1,39 @@
+<h2>Note <%= @block.data["number"] %></h2>
+
+<ul>
+  <li>
+    <strong>Content:</strong>
+    <ul>
+      <li>
+        <strong>Number:</strong>
+        <%= @block.data["number"] %>
+      </li>
+      <li>
+        <strong>Note:</strong>
+        <%= @block.data["note"] %>
+      </li>
+    </ul>
+  </li>
+
+  <li>
+    <strong>Metadata:</strong>
+    <ul>
+      <li>
+        <strong>Originating block:</strong>
+        <%= @block.originating_block %>
+      </li>
+
+      <li>
+        <strong>Hash:</strong>
+        <%= @block.hash %>
+      </li>
+
+      <li>
+        <strong>Previous hash:</strong>
+        <%= @block.previous_hash %>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<%= link "Back", to: block_path(@conn, :index) %>

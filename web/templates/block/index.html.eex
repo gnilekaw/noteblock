@@ -1,0 +1,27 @@
+<h2>Listing blocks</h2>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Number</th>
+      <th>Note</th>
+      <th>Action</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for block <- @blocks do %>
+    <tr>
+      <td><%= block.data["number"] %></td>
+      <td><%= block.data["note"] %></td>
+      <td><%= block.data["action"] %></td>
+      <td class="text-right">
+        <%= link "Show", to: block_path(@conn, :show, block), class: "btn btn-default btn-xs" %>
+        <%= link "Delete", to: block_path(@conn, :delete, block), method: :delete, class: "btn btn-danger btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<%= link "New block", to: block_path(@conn, :new) %>
