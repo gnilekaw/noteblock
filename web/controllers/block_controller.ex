@@ -4,7 +4,7 @@ defmodule Noteblock.BlockController do
   alias Noteblock.{Repo, Block, Hash}
 
   def index(conn, _params) do
-    blocks = Repo.all(Block)
+    blocks = Repo.all(from b in Block, order_by: [desc: b.id])
     render(conn, "index.html", blocks: blocks)
   end
 

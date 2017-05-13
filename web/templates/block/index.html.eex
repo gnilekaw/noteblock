@@ -3,6 +3,7 @@
 <table class="table">
   <thead>
     <tr>
+      <th>Block</th>
       <th>Number</th>
       <th>Note</th>
       <th>Action</th>
@@ -12,12 +13,15 @@
   <tbody>
 <%= for block <- @blocks do %>
     <tr>
+      <td><%= block.id %></td>
       <td><%= block.data["number"] %></td>
       <td><%= block.data["note"] %></td>
       <td><%= block.data["action"] %></td>
       <td class="text-right">
+        <%= if block.data["action"] !== "delete" do %>
+          <%= link "Delete", to: block_path(@conn, :delete, block), method: :delete, class: "btn btn-danger btn-xs" %>
+        <% end %>
         <%= link "Show", to: block_path(@conn, :show, block), class: "btn btn-default btn-xs" %>
-        <%= link "Delete", to: block_path(@conn, :delete, block), method: :delete, class: "btn btn-danger btn-xs" %>
       </td>
     </tr>
 <% end %>
