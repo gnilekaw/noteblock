@@ -4,10 +4,12 @@ defmodule Noteblock.BlockTest do
   alias Noteblock.Block
 
   @valid_attrs %{
-    data: %{},
-    hash: "some content",
-    originating_block: "some content",
-    previous_hash: "some content"
+    hash: "the hash",
+    previous_hash: "the hash before this one",
+    originating_block: "the hash, or, another hash",
+    data: %{
+      "number" => "1000000"
+    }
   }
 
   @invalid_attrs %{}

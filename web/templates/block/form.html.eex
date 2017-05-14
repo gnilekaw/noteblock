@@ -19,10 +19,10 @@
   </div>
 
   <div class="form-group">
-    <%= hidden_input f, :originating_block %>
-    <%= error_tag f, :originating_block %>
     <%= hidden_input f, :hash %>
     <%= error_tag f, :hash %>
+    <%= hidden_input f, :originating_block %>
+    <%= error_tag f, :originating_block %>
     <%= hidden_input f, :previous_hash %>
     <%= error_tag f, :previous_hash %>
 

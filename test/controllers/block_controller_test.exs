@@ -4,16 +4,14 @@ defmodule Noteblock.BlockControllerTest do
   alias Noteblock.{Repo, Block, Hash}
 
   @valid_block_attrs %{
-    hash: "some hash",
-    previous_hash: "some other hash",
-    originating_block: "some hash"
+    data: %{"number" => "2", "note" => "hello jupiter"}
   }
 
-  @valid_data_attrs %{
-    data: %{number: 1, note: "hello jupiter"}
+  @invalid_attrs %{
+    data: %{
+      "number" => ""
+    }
   }
-
-  @invalid_attrs %{}
 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, block_path(conn, :index)
@@ -31,19 +29,33 @@ defmodule Noteblock.BlockControllerTest do
   end
 
   test "creates resource and redirects when data is valid", %{conn: conn} do
-    conn = post conn, block_path(conn, :create), block: @valid_block_attrs, data: @valid_data_attrs
+    Repo.insert! %Block{
+      data: %{"number" => "1", "note" => "hwllo eorld"},
+      originating_block: Hash.sha256("faker"),
+      hash: Hash.sha256("faker"),
+      previous_hash: Hash.sha256("other faker")
+    }
+
+    conn = post conn, block_path(conn, :create), block: @valid_block_attrs
     assert redirected_to(conn) == block_path(conn, :index)
-    assert Repo.get_by(Block, @valid_block_attrs)
+    # TODO: a way to find that new block!
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
-    conn = post conn, block_path(conn, :create), block: @invalid_attrs, data: @invalid_attrs
+    Repo.insert! %Block{
+      data: %{"number" => "1", "note" => "hwllo eorld"},
+      originating_block: Hash.sha256("faker"),
+      hash: Hash.sha256("faker"),
+      previous_hash: Hash.sha256("other faker")
+    }
+
+    conn = post conn, block_path(conn, :create), block: @invalid_attrs
     assert html_response(conn, 200) =~ "New block"
   end
 
   test "shows chosen resource", %{conn: conn} do
     block = Repo.insert! %Block{
-      data: %{number: 1, note: "hwllo eorld"},
+      data: %{"number" => "1", "note" => "hwllo eorld"},
       originating_block: Hash.sha256("faker"),
       hash: Hash.sha256("faker"),
       previous_hash: Hash.sha256("other faker")
@@ -53,9 +65,9 @@ defmodule Noteblock.BlockControllerTest do
     assert html_response(conn, 200) =~ "Note 1"
   end
 
-  test "renders form to edit a resources", %{conn: conn} do
+  test "renders form to edit a chosen resource", %{conn: conn} do
     block = Repo.insert! %Block{
-      data: %{number: 1, note: "hwllo eorld"},
+      data: %{"number" => "1", "note" => "hwllo eorld"},
       hash: Hash.sha256("faker"),
       originating_block: Hash.sha256("faker"),
       previous_hash: Hash.sha256("other faker")
@@ -68,9 +80,26 @@ defmodule Noteblock.BlockControllerTest do
     assert response =~ Hash.sha256("faker")
   end
 
+  test "updates chosen resource and redirects when data is valid", %{conn: conn} do
+    block = Repo.insert! %Block{
+      data: %{"number" => "1", "note" => "hwllo eorld"},
+      hash: Hash.sha256("faker"),
+      originating_block: Hash.sha256("faker"),
+      previous_hash: Hash.sha256("other faker")
+    }
+
+    updates = %{
+      data: %{number: 1, note: "hello world"}
+    }
+
+    conn = put conn, block_path(conn, :update, block.hash), block: updates
+    assert redirected_to(conn) == block_path(conn, :index)
+    # TODO: need method to get most recent note
+  end
+
   test "deletes a resource", %{conn: conn} do
     block = Repo.insert! %Block{
-      data: %{number: 1, note: "hwllo eorld"},
+      data: %{"number" => "1", "note" => "hwllo eorld"},
       originating_block: Hash.sha256("faker"),
       hash: Hash.sha256("faker"),
       previous_hash: Hash.sha256("previous faker")
