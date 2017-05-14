@@ -59,7 +59,6 @@ defmodule Noteblock.BlockController do
 
     {:ok, hash} = Hash.new %{
       previous_hash: previous_hash,
-      originating_block: block.originating_block,
       data: data
     }
 

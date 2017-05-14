@@ -22,13 +22,13 @@ defmodule Noteblock.Hash do
   @doc """
     Creates a shasum from a JSON-encoded block.
   """
-  def new(%{previous_hash: p, originating_block: o, data: d}) do
-    empty_value = [p, o, d] |> Enum.any?(&(is_nil &1))
+  def new(%{previous_hash: p, data: d}) do
+    empty_value = [p, d] |> Enum.any?(&(is_nil &1))
 
     if empty_value do
       {:error, "Nil keys are not allowed"}
     else
-      shasum = [p, o, d] |> Poison.encode |> sha256
+      shasum = [p, d] |> Poison.encode |> sha256
 
       {:ok, shasum}
     end

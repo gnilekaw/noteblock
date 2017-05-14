@@ -8,13 +8,12 @@ defmodule Noteblock.HashTest do
   test "Hash.new creates a new hash with correct values" do
     block = %{
       data: %{number: 1, note: "Foo"},
-      originating_block: "fake hash",
       previous_hash: "fake hash"
     }
 
     expected = {
       :ok,
-      "20BBE4EAA577D591755DDD460258F001DED9226C3E22EBF9111285B77241FA00"
+      "AA898DBE558D35DA696E12C3E708158D96DB09A46E3604542E01A7E0AFB292FE"
     }
 
     assert Hash.new(block) == expected
@@ -23,7 +22,6 @@ defmodule Noteblock.HashTest do
   test "Hash.new returns an error when any values are nil" do
     map = %{
       data: nil,
-      originating_block: nil,
       previous_hash: nil
     }
 
