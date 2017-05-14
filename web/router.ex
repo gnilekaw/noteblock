@@ -12,6 +12,6 @@ defmodule Noteblock.Router do
   scope "/", Noteblock do
     pipe_through :browser # Use the default browser stack
 
-    resources "/", BlockController
+    resources "/", BlockController, param: "hash"
   end
 end

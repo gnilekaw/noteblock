@@ -38,13 +38,13 @@ defmodule Noteblock.BlockController do
     end
   end
 
-  def show(conn, %{"id" => id}) do
-    block = Repo.get!(Block, id)
+  def show(conn, %{"hash" => hash}) do
+    block = Repo.get_by!(Block, hash: hash)
     render(conn, "show.html", block: block)
   end
 
-  def delete(conn, %{"id" => id}) do
-    block = Repo.get! Block, id
+  def delete(conn, %{"hash" => hash}) do
+    block = Repo.get_by! Block, hash: hash
     parent_data = Map.get block, :data
     last_block = Block |> Block.last |> Repo.one
 

@@ -49,7 +49,7 @@ defmodule Noteblock.BlockControllerTest do
       previous_hash: Hash.sha256("other faker")
     }
 
-    conn = get conn, block_path(conn, :show, block)
+    conn = get conn, block_path(conn, :show, block.hash)
     assert html_response(conn, 200) =~ "Note 1"
   end
 
@@ -61,7 +61,7 @@ defmodule Noteblock.BlockControllerTest do
       previous_hash: Hash.sha256("previous faker")
     }
 
-    conn = delete conn, block_path(conn, :delete, block)
+    conn = delete conn, block_path(conn, :delete, block.hash)
     assert redirected_to(conn) == block_path(conn, :index)
 
     # TODO: Test that the new block show that it is deleted
