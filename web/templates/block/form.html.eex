@@ -8,12 +8,14 @@
 
   <div class="form-group">
     <%= label :data, :number, class: "control-label" %>
-    <%= number_input :data, :number %>
+    <%= number_value = f.data.data["number"] || "" %>
+    <%= number_input f, :block_data_number, name: "block[data][number]", value: number_value, class: "form-control" %>
   </div>
 
   <div class="form-group">
     <%= label :data, :note, class: "control-label" %>
-    <%= textarea :data, :note %>
+    <%= note_value = f.data.data["note"] || "" %>
+    <%= textarea f, :block_data_note, name: "block[data][note]", value: note_value, class: "form-control" %>
   </div>
 
   <div class="form-group">

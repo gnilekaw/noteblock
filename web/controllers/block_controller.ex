@@ -46,7 +46,7 @@ defmodule Noteblock.BlockController do
   def edit(conn, %{"hash" => hash}) do
     block = Repo.get_by!(Block, hash: hash)
     changeset = Block.changeset(block)
-    render(conn, "edit.html", block: block, changeset: changeset)
+    render(conn, "edit.html", block: block, data: block.data, changeset: changeset)
   end
 
   def delete(conn, %{"hash" => hash}) do
