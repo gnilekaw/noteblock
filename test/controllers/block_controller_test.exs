@@ -22,8 +22,6 @@ defmodule Noteblock.BlockControllerTest do
 
   test "renders form for new resources", %{conn: conn} do
     Repo.insert! %Block{
-      data: %{number: 1, note: "hwllo eorld"},
-      hash: Hash.sha256("faker"),
       originating_block: Hash.sha256("faker"),
       previous_hash: Hash.sha256("other faker")
     }

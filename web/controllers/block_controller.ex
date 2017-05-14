@@ -9,14 +9,11 @@ defmodule Noteblock.BlockController do
   end
 
   def new(conn, _params) do
-    last_block = Block |> Block.last |> Repo.one
-
-    new_hash = Hash.new(last_block)
+    last_block = last_block()
 
     changeset = Block.changeset(%Block{
-      originating_block: new_hash,
-      previous_hash: Map.get(last_block, :hash),
-      hash: new_hash
+      originating_block: last_block.originating_block,
+      previous_hash: last_block.hash
     })
 
     render(conn, "new.html", changeset: changeset)
@@ -49,20 +46,28 @@ defmodule Noteblock.BlockController do
     render(conn, "edit.html", block: block, data: block.data, changeset: changeset)
   end
 
-  def delete(conn, %{"hash" => hash}) do
-    block = Repo.get_by! Block, hash: hash
-    parent_data = Map.get block, :data
-    last_block = Block |> Block.last |> Repo.one
+  def delete(conn, %{"hash" => id}) do
+    block = Repo.get_by! Block, hash: id
+
+    %{hash: previous_hash} = last_block()
+
+    data = %{
+      action: "delete",
+      number: Map.get(block.data, "number"),
+      note: nil
+    }
+
+    {:ok, hash} = Hash.new %{
+      previous_hash: previous_hash,
+      originating_block: block.originating_block,
+      data: data
+    }
 
     changeset = Block.changeset(%Block{
-      originating_block: Map.get(block, :hash),
-      previous_hash: Map.get(last_block, :hash),
-      hash: Hash.new(last_block),
-      data: %{
-        action: "delete",
-        number: Map.get(parent_data, "number"),
-        note: nil
-      }
+      originating_block: block.originating_block,
+      previous_hash: previous_hash,
+      hash: hash,
+      data: data
     })
 
     case Repo.insert(changeset) do
@@ -73,5 +78,9 @@ defmodule Noteblock.BlockController do
       {:error, changeset} ->
         render(conn, "edit.html", block: block, changeset: changeset)
     end
+  end
+
+  defp last_block do
+    Block |> Block.last |> Repo.one
   end
 end
