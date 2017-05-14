@@ -45,12 +45,25 @@ defmodule Noteblock.BlockControllerTest do
   test "shows chosen resource", %{conn: conn} do
     block = Repo.insert! %Block{
       data: %{number: 1, note: "hwllo eorld"},
+      originating_block: Hash.sha256("faker"),
       hash: Hash.sha256("faker"),
       previous_hash: Hash.sha256("other faker")
     }
 
     conn = get conn, block_path(conn, :show, block.hash)
     assert html_response(conn, 200) =~ "Note 1"
+  end
+
+  test "renders form to edit a resources", %{conn: conn} do
+    block = Repo.insert! %Block{
+      data: %{number: 1, note: "hwllo eorld"},
+      hash: Hash.sha256("faker"),
+      originating_block: Hash.sha256("faker"),
+      previous_hash: Hash.sha256("other faker")
+    }
+
+    conn = get conn, block_path(conn, :edit, block.hash)
+    assert html_response(conn, 200) =~ "Edit block"
   end
 
   test "deletes a resource", %{conn: conn} do

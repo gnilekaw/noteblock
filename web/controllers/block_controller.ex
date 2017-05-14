@@ -43,6 +43,12 @@ defmodule Noteblock.BlockController do
     render(conn, "show.html", block: block)
   end
 
+  def edit(conn, %{"hash" => hash}) do
+    block = Repo.get_by!(Block, hash: hash)
+    changeset = Block.changeset(block)
+    render(conn, "edit.html", block: block, changeset: changeset)
+  end
+
   def delete(conn, %{"hash" => hash}) do
     block = Repo.get_by! Block, hash: hash
     parent_data = Map.get block, :data
