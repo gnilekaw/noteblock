@@ -17,15 +17,27 @@ defmodule Noteblock.Block do
     struct
     |> cast(params, [:hash, :previous_hash, :data, :originating_block])
     |> validate_required([:hash, :previous_hash, :data, :originating_block])
-    |> validate_map(:data)
+    |> validate_number(:data)
+    |> validate_action(:data)
   end
 
-  def validate_map(changeset, field) do
+  defp validate_number(changeset, field) do
     validate_change(changeset, field, fn _field, data ->
-      if String.length(data["number"]) > 0 && String.to_integer(data["number"]) do
-        []
-      else
-        [data: "data[number] cannot be nil"]
+
+      valid_conditions = Map.has_key?(data, "number") and String.length(data["number"]) > 0
+
+      case valid_conditions do
+        true -> []
+        false -> [data: "data[number] cannot be nil"]
+      end
+    end)
+  end
+
+  defp validate_action(changeset, field) do
+    validate_change(changeset, field, fn _field, data ->
+      case Map.has_key?(data, "action") do
+        true -> []
+        false -> [data: "data[action] cannot be nil"]
       end
     end)
   end

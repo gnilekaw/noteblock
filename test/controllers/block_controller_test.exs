@@ -4,12 +4,13 @@ defmodule Noteblock.BlockControllerTest do
   alias Noteblock.{Repo, Block, Hash}
 
   @valid_block_attrs %{
-    data: %{"number" => "2", "note" => "hello jupiter"}
+    data: %{"number" => "2", "note" => "hello jupiter", "action" => "create"}
   }
 
   @invalid_attrs %{
     data: %{
-      "number" => ""
+      "number" => "",
+      "action" => ""
     }
   }
 
@@ -43,7 +44,7 @@ defmodule Noteblock.BlockControllerTest do
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
     Repo.insert! %Block{
-      data: %{"number" => "1", "note" => "hwllo eorld"},
+      data: %{"number" => "1", "note" => "hwllo eorld", "action" => "create"},
       originating_block: Hash.sha256("faker"),
       hash: Hash.sha256("faker"),
       previous_hash: Hash.sha256("other faker")

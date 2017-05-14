@@ -8,7 +8,8 @@ defmodule Noteblock.BlockTest do
     previous_hash: "the hash before this one",
     originating_block: "the hash, or, another hash",
     data: %{
-      "number" => "1000000"
+      "number" => "1000000",
+      "action" => "create"
     }
   }
 
