@@ -21,6 +21,7 @@
         <%= if block.data["action"] !== "delete" do %>
           <%= link "Delete", to: block_path(@conn, :delete, block.hash), method: :delete, class: "btn btn-danger btn-xs" %>
         <% end %>
+        <%= link "Edit", to: block_path(@conn, :edit, block.hash), class: "btn btn-default btn-xs" %>
         <%= link "Show", to: block_path(@conn, :show, block.hash), class: "btn btn-default btn-xs" %>
       </td>
     </tr>
