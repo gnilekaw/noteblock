@@ -44,7 +44,14 @@ defmodule Noteblock.BlockController do
 
   def show(conn, %{"hash" => hash}) do
     block = Repo.get_by!(Block, hash: hash)
-    render(conn, "show.html", block: block)
+
+    query = from b in Block,
+      where: b.originating_block == ^block.originating_block,
+      order_by: [desc: b.id]
+
+    history = Repo.all(query)
+
+    render(conn, "show.html", block: block, history: history)
   end
 
   def edit(conn, %{"hash" => hash}) do

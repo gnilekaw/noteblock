@@ -1,0 +1,22 @@
+<div>
+  <p><%= @block.data["note"] %></p>
+  <ul>
+    <li>
+      <strong>block</strong>
+      <%= @block.id %>
+    </li>
+    <li>
+      <strong>originating block</strong>
+      <%= @block.originating_block %>
+    </li>
+    <li>
+      <strong>hash</strong>
+      <%= @block.hash %>
+    </li>
+    <li>
+      <strong>previous hash</strong>
+      <%= @block.previous_hash %>
+    </li>
+  </ul>
+</div>
+<hr>

@@ -45,7 +45,7 @@ defmodule Noteblock.Block do
   @doc """
   Gets the last block from the chain.
   """
-  def last(query) do
-    from n in query, order_by: [desc: n.id], limit: 1
+  def last(block) do
+    from n in block, order_by: [desc: n.id], limit: 1
   end
 end
