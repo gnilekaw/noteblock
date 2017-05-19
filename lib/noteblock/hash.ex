@@ -23,7 +23,7 @@ defmodule Noteblock.Hash do
     Creates a shasum from a JSON-encoded block.
   """
   def new(%{previous_hash: p, data: d}) do
-    empty_value = [p, d] |> Enum.any?(&(is_nil &1))
+    empty_value = [p, d] |> Enum.any?(&is_nil/1)
 
     if empty_value do
       {:error, "Nil keys are not allowed"}
