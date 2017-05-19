@@ -1,8 +1,8 @@
 <h2>Note <%= @block.data["number"] %></h2>
 
 <td class="text-right">
-  <%= link "Delete", to: block_path(@conn, :delete, @block.hash), method: :delete, class: "btn btn-danger btn-xs" %>
-  <%= link "Edit", to: block_path(@conn, :edit, @block.hash), class: "btn btn-default btn-xs" %>
+  <%= link "Delete", to: block_path(@conn, :delete, @block.hash), method: :delete, class: "btn btn-danger" %>
+  <%= link "Edit", to: block_path(@conn, :edit, @block.hash), class: "btn btn-default" %>
 </td>
 
 <%= for block <- @history do %>
