@@ -19,6 +19,16 @@ defmodule Noteblock.BlockControllerTest do
     assert html_response(conn, 200) =~ "Listing blocks"
   end
 
+  test "index displays a button for verifying the ledger", %{conn: conn} do
+    conn = get conn, block_path(conn, :index)
+    assert html_response(conn, 200) =~ "Verify Ledger"
+  end
+
+  test "ledgers can be verified", %{conn: conn} do
+    conn = get conn, block_path(conn, :verify_ledger)
+    assert html_response(conn, 200) =~ "Ledger Status: verified"
+  end
+
   test "renders form for new resources", %{conn: conn} do
     Repo.insert! %Block{
       originating_block: Hash.sha256("faker"),

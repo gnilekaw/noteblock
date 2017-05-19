@@ -8,6 +8,11 @@ defmodule Noteblock.BlockController do
     render(conn, "index.html", blocks: blocks)
   end
 
+  def verify_ledger(conn, _params) do
+    status = "verified"
+    render(conn, "verify_ledger.html", status: status)
+  end
+
   def new(conn, _params) do
     changeset = Block.changeset(%Block{})
     render(conn, "new.html", changeset: changeset)

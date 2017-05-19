@@ -2,6 +2,8 @@
 
 <%= link "New block", to: block_path(@conn, :new), class: "btn btn-default btn-xs" %>
 
+<%= link "Verify Ledger", to: "#{block_path(@conn, :verify_ledger)}", class: "btn btn-default btn-xs" %>
+
 <table class="table">
   <thead>
     <tr>
