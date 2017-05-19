@@ -9,7 +9,13 @@ defmodule Noteblock.BlockController do
   end
 
   def verify_ledger(conn, _params) do
-    status = "verified"
+    [block_1, block_2] = last_two_blocks()
+    # TODO: This only verifies TWO blocks, lol
+    status = case Hash.verify(block_1, block_2) do
+      true -> "Verified"
+      false -> "Errors"
+    end
+
     render(conn, "verify_ledger.html", status: status)
   end
 
@@ -129,5 +135,9 @@ defmodule Noteblock.BlockController do
 
   defp last_block do
     Block |> Block.last |> Repo.one
+  end
+
+  defp last_two_blocks do
+    Block |> Block.last_two |> Repo.all
   end
 end

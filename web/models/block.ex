@@ -48,4 +48,11 @@ defmodule Noteblock.Block do
   def last(block) do
     from n in block, order_by: [desc: n.id], limit: 1
   end
+
+  @doc """
+  Gets the last two blocks from the chain.
+  """
+  def last_two(block) do
+    from n in block, order_by: [desc: n.id], limit: 2
+  end
 end

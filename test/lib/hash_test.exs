@@ -40,7 +40,7 @@ defmodule Noteblock.HashTest do
 
     data = "Heap'o JSON"
 
-    hash = Hash.new(%{
+    {:ok, hash} = Hash.new(%{
       previous_hash: block_2_hash,
       data: data
     })

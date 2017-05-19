@@ -25,8 +25,21 @@ defmodule Noteblock.BlockControllerTest do
   end
 
   test "ledgers can be verified", %{conn: conn} do
+    Repo.insert! %Block{
+      originating_block: Hash.sha256("faker"),
+      previous_hash: Hash.sha256("other faker")
+    }
+
+    Repo.insert! %Block{
+      data: %{"number" => "1", "note" => "hwllo eorld"},
+      originating_block: Hash.sha256("faker"),
+      hash: Hash.sha256("faker"),
+      previous_hash: Hash.sha256("other faker")
+    }
+
     conn = get conn, block_path(conn, :verify_ledger)
-    assert html_response(conn, 200) =~ "Ledger Status: verified"
+    # The default state, when there are no blocks existing
+    assert html_response(conn, 200) =~ "Ledger Status: Errors"
   end
 
   test "renders form for new resources", %{conn: conn} do

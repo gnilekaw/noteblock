@@ -35,7 +35,7 @@ defmodule Noteblock.Hash do
   def verify(block_1, block_2) do
     previous_hash_matches = block_1.previous_hash == block_2.hash
 
-    block_1_hash = new(%{
+    {:ok, block_1_hash} = new(%{
       previous_hash: block_1.previous_hash,
       data: block_1.data
     })
