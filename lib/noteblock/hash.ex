@@ -11,9 +11,7 @@ defmodule Noteblock.Hash do
         "95D64CACCE0F0E5B0D1B843862F0ACCFADB787A4CABB8A88F7F1694EA232A5FC"
 
   """
-  def sha256({:ok, string}) do
-    sha256(string)
-  end
+  def sha256({:ok, string}), do: sha256(string)
 
   def sha256(string) do
     :crypto.hash(:sha256, string) |> Base.encode16
@@ -32,5 +30,18 @@ defmodule Noteblock.Hash do
 
       {:ok, shasum}
     end
+  end
+
+  def verify(block_1, block_2) do
+    previous_hash_matches = block_1.previous_hash == block_2.hash
+
+    block_1_hash = new(%{
+      previous_hash: block_1.previous_hash,
+      data: block_1.data
+    })
+
+    current_hash_matches = block_1.hash == block_1_hash
+
+    (previous_hash_matches && current_hash_matches)
   end
 end

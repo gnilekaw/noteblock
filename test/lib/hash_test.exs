@@ -4,6 +4,7 @@ defmodule Noteblock.HashTest do
   doctest Noteblock.Hash
 
   alias Noteblock.Hash
+  alias Noteblock.Block
 
   test "Hash.new creates a new hash with correct values" do
     block = %{
@@ -29,4 +30,44 @@ defmodule Noteblock.HashTest do
 
     assert Hash.new(map) == expected
   end
+
+  test "Hash.verify/2 verifies two hashes" do
+    block_2_hash = "Foohash"
+
+    block_2 = %Block{
+      hash: block_2_hash
+    }
+
+    data = "Heap'o JSON"
+
+    hash = Hash.new(%{
+      previous_hash: block_2_hash,
+      data: data
+    })
+
+    block_1 = %Block{
+      hash: hash,
+      data: data,
+      previous_hash: block_2_hash
+    }
+
+    assert Hash.verify(block_1, block_2) == true
+  end
+
+  test "Hash.verify/2 fails to verify two hashes" do
+    block_2 = %Block{
+      hash: "Foohash"
+    }
+
+    block_1 = %Block{
+      hash: "Other hash",
+      data: "Other data",
+      previous_hash: "Other Other hash"
+    }
+
+    message = {:error, "Message: The hashes were wrong, but why?"}
+
+    assert Hash.verify(block_1, block_2) == message
+  end
+
 end
