@@ -21,7 +21,12 @@ defmodule Noteblock.BlockController do
 
   def new(conn, _params) do
     changeset = Block.changeset(%Block{})
-    render(conn, "new.html", changeset: changeset)
+    render(
+      conn,
+      "new.html",
+      changeset: changeset,
+      disabled: disabled_form(changeset.data.data)
+    )
   end
 
   def create(conn, %{"block" => block_params}) do
@@ -49,7 +54,11 @@ defmodule Noteblock.BlockController do
         |> put_flash(:info, "Block created successfully.")
         |> redirect(to: block_path(conn, :index))
       {:error, changeset} ->
-        render(conn, "new.html", changeset: changeset)
+        render(conn,
+          "new.html",
+          changeset: changeset,
+          disabled: disabled_form(changeset.data.data)
+        )
     end
   end
 
@@ -62,7 +71,8 @@ defmodule Noteblock.BlockController do
 
     [block | history] = Repo.all(query)
 
-    render(conn,
+    render(
+      conn,
       "show.html",
       block: block,
       history: history,
@@ -73,7 +83,8 @@ defmodule Noteblock.BlockController do
   def edit(conn, %{"hash" => hash}) do
     block = Repo.get_by!(Block, hash: hash)
     changeset = Block.changeset(block)
-    render(conn,
+    render(
+      conn,
       "edit.html",
       block: block.hash,
       disabled: disabled_form(changeset.data.data),
