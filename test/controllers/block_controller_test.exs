@@ -16,7 +16,7 @@ defmodule Noteblock.BlockControllerTest do
 
   test "lists all entries on index", %{conn: conn} do
     conn = get conn, block_path(conn, :index)
-    assert html_response(conn, 200) =~ "Listing blocks"
+    assert html_response(conn, 200) =~ "Ledger"
   end
 
   test "index displays a button for verifying the ledger", %{conn: conn} do

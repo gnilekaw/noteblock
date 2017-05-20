@@ -1,4 +1,4 @@
-<h2>Listing blocks</h2>
+<h2>Ledger</h2>
 
 <%= link "New block", to: block_path(@conn, :new), class: "btn btn-default btn" %>
 <%= link "Verify Ledger", to: "#{block_path(@conn, :verify_ledger)}", class: "btn btn-default btn" %>
