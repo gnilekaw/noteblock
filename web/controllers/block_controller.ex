@@ -62,7 +62,12 @@ defmodule Noteblock.BlockController do
 
     [block | history] = Repo.all(query)
 
-    render(conn, "show.html", block: block, history: history)
+    render(conn,
+      "show.html",
+      block: block,
+      history: history,
+      disabled: disabled_form(block.data)
+    )
   end
 
   def edit(conn, %{"hash" => hash}) do
@@ -71,13 +76,13 @@ defmodule Noteblock.BlockController do
     render(conn,
       "edit.html",
       block: block.hash,
-      disabled: disabled_form(changeset),
+      disabled: disabled_form(changeset.data.data),
       changeset: changeset
     )
   end
 
-  defp disabled_form(changeset) do
-    case changeset.data.data["action"] do
+  defp disabled_form(data) do
+    case data["action"] do
       "delete" -> %{edit_number: true, edit_note: true, submit: true}
       _ -> %{edit_number: false, edit_note: false, submit: false}
     end

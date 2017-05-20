@@ -1,7 +1,9 @@
-<td class="text-right">
-  <%= link "Edit", to: block_path(@conn, :edit, @block.hash), class: "btn btn-default" %>
-  <%= link "Delete", to: block_path(@conn, :delete, @block.hash), method: :delete, class: "btn btn-danger" %>
-</td>
+<%= if !@disabled.submit do %>
+  <td class="text-right">
+    <%= link "Edit", to: block_path(@conn, :edit, @block.hash), class: "btn btn-default" %>
+    <%= link "Delete", to: block_path(@conn, :delete, @block.hash), method: :delete, class: "btn btn-danger" %>
+  </td>
+<% end %>
 
 <h2>Note <%= @block.data["number"] %></h2>
 
