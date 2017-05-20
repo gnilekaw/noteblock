@@ -1,9 +1,20 @@
 <div>
-  <p><%= @block.data["note"] %></p>
+  <p class="lead">
+    <%= if @block.data["note"] do %>
+      <%= @block.data["note"] %>
+    <% else %>
+      <em style="color: red">Deleted</em>
+    <% end %>
+  </p>
+
   <ul>
     <li>
       <strong>block</strong>
       <%= @block.id %>
+    </li>
+    <li>
+      <strong>action</strong>
+      <%= @block.data["action"] %>
     </li>
     <li>
       <strong>originating block</strong>

@@ -60,7 +60,7 @@ defmodule Noteblock.BlockController do
       where: b.originating_block == ^block.originating_block,
       order_by: [desc: b.id]
 
-    history = Repo.all(query)
+    [block | history] = Repo.all(query)
 
     render(conn, "show.html", block: block, history: history)
   end
@@ -68,7 +68,19 @@ defmodule Noteblock.BlockController do
   def edit(conn, %{"hash" => hash}) do
     block = Repo.get_by!(Block, hash: hash)
     changeset = Block.changeset(block)
-    render(conn, "edit.html", block: block.hash, data: block.data, changeset: changeset)
+    render(conn,
+      "edit.html",
+      block: block.hash,
+      disabled: disabled_form(changeset),
+      changeset: changeset
+    )
+  end
+
+  defp disabled_form(changeset) do
+    case changeset.data.data["action"] do
+      "delete" -> %{edit_number: true, edit_note: true, submit: true}
+      _ -> %{edit_number: false, edit_note: false, submit: false}
+    end
   end
 
   def update(conn, %{"hash" => hash, "block" => block_params}) do
