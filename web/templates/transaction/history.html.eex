@@ -1,0 +1,33 @@
+<div>
+  <p class="lead">
+    <%= if @transaction.data["note"] do %>
+      <%= @transaction.data["note"] %>
+    <% else %>
+      <em style="color: red">Deleted</em>
+    <% end %>
+  </p>
+
+  <ul>
+    <li>
+      <strong>transaction</strong>
+      <%= @transaction.id %>
+    </li>
+    <li>
+      <strong>action</strong>
+      <%= @transaction.data["action"] %>
+    </li>
+    <li>
+      <strong>originating transaction</strong>
+      <%= @transaction.originating_hash %>
+    </li>
+    <li>
+      <strong>hash</strong>
+      <%= @transaction.hash %>
+    </li>
+    <li>
+      <strong>previous hash</strong>
+      <%= @transaction.previous_hash %>
+    </li>
+  </ul>
+</div>
+<hr>

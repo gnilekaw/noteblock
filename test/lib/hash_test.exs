@@ -4,10 +4,10 @@ defmodule Noteblock.HashTest do
   doctest Noteblock.Hash
 
   alias Noteblock.Hash
-  alias Noteblock.Block
+  alias Noteblock.Transaction
 
   test "Hash.new creates a new hash with correct values" do
-    block = %{
+    transaction = %{
       data: %{number: 1, note: "Foo"},
       previous_hash: "fake hash"
     }
@@ -17,7 +17,7 @@ defmodule Noteblock.HashTest do
       "AA898DBE558D35DA696E12C3E708158D96DB09A46E3604542E01A7E0AFB292FE"
     }
 
-    assert Hash.new(block) == expected
+    assert Hash.new(transaction) == expected
   end
 
   test "Hash.new returns an error when any values are nil" do
@@ -32,34 +32,34 @@ defmodule Noteblock.HashTest do
   end
 
   test "Hash.verify/2 verifies two hashes" do
-    block_2_hash = "Foohash"
+    transaction_2_hash = "Foohash"
 
-    block_2 = %Block{
-      hash: block_2_hash
+    transaction_2 = %Transaction{
+      hash: transaction_2_hash
     }
 
     data = "Heap'o JSON"
 
     {:ok, hash} = Hash.new(%{
-      previous_hash: block_2_hash,
+      previous_hash: transaction_2_hash,
       data: data
     })
 
-    block_1 = %Block{
+    transaction_1 = %Transaction{
       hash: hash,
       data: data,
-      previous_hash: block_2_hash
+      previous_hash: transaction_2_hash
     }
 
-    assert Hash.verify(block_1, block_2) == true
+    assert Hash.verify(transaction_1, transaction_2) == true
   end
 
   test "Hash.verify/2 fails to verify two hashes" do
-    block_2 = %Block{
+    transaction_2 = %Transaction{
       hash: "Foohash"
     }
 
-    block_1 = %Block{
+    transaction_1 = %Transaction{
       hash: "Other hash",
       data: "Other data",
       previous_hash: "Other Other hash"
@@ -67,7 +67,7 @@ defmodule Noteblock.HashTest do
 
     message = {:error, "Message: The hashes were wrong, but why?"}
 
-    assert Hash.verify(block_1, block_2) == message
+    assert Hash.verify(transaction_1, transaction_2) == message
   end
 
 end

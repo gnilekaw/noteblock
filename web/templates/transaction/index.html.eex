@@ -1,0 +1,31 @@
+<h2>Ledger</h2>
+
+<%= link "New block", to: transaction_path(@conn, :new), class: "btn btn-default btn" %>
+<%= link "Verify Ledger", to: "#{transaction_path(@conn, :verify_ledger)}", class: "btn btn-default btn" %>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Block</th>
+      <th>Originating Block</th>
+      <th>Number</th>
+      <th>Note</th>
+      <th>Action</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for transaction <- @transactions do %>
+    <tr>
+      <td><%= transaction.id %></td>
+      <td class="short-hash"><%= transaction.originating_hash %></td>
+      <td><%= transaction.data["number"] %></td>
+      <td><%= transaction.data["note"] %></td>
+      <td><%= transaction.data["action"] %></td>
+      <td class="text-right">
+        <%= link "Show", to: transaction_path(@conn, :show, transaction.hash), class: "btn btn-default btn-xs" %>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>

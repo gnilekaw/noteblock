@@ -14,7 +14,7 @@
   <body>
     <div class="container">
       <header class="header">
-        <h1><%= link "Noteblock", to: block_path(@conn, :index) %></h1>
+        <h1><%= link "Noteblock", to: transaction_path(@conn, :index) %></h1>
       </header>
 
       <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>

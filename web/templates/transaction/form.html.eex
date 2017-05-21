@@ -8,21 +8,21 @@
   <div class="form-group">
     <%= label :data, :number, class: "control-label" %>
     <%= number_value = f.data.data["number"] || "" %>
-    <%= number_input f, :block_data_number, disabled: @disabled.edit_number, name: "block[data][number]", value: number_value, class: "form-control" %>
+    <%= number_input f, :transaction_data_number, disabled: @disabled.edit_number, name: "transaction[data][number]", value: number_value, class: "form-control" %>
     <%= error_tag f, :data %>
   </div>
 
   <div class="form-group">
     <%= label :data, :note, class: "control-label" %>
     <%= note_value = f.data.data["note"] || "" %>
-    <%= textarea f, :block_data_note, disabled: @disabled.edit_note, name: "block[data][note]", value: note_value, class: "form-control" %>
+    <%= textarea f, :transaction_data_note, disabled: @disabled.edit_note, name: "transaction[data][note]", value: note_value, class: "form-control" %>
   </div>
 
   <div class="form-group">
     <%= hidden_input f, :hash %>
     <%= error_tag f, :hash %>
-    <%= hidden_input f, :originating_block %>
-    <%= error_tag f, :originating_block %>
+    <%= hidden_input f, :originating_hash %>
+    <%= error_tag f, :originating_hash %>
     <%= hidden_input f, :previous_hash %>
     <%= error_tag f, :previous_hash %>
 

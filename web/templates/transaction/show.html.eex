@@ -1,0 +1,14 @@
+<%= if !@disabled.submit do %>
+  <td class="text-right">
+    <%= link "Edit", to: transaction_path(@conn, :edit, @transaction.hash), class: "btn btn-default" %>
+    <%= link "Delete", to: transaction_path(@conn, :delete, @transaction.hash), method: :delete, class: "btn btn-danger", data: [confirm: "Are you sure?"] %>
+  </td>
+<% end %>
+
+<h2>Note <%= @transaction.data["number"] %></h2>
+
+<%= render "history.html", transaction: @transaction %>
+
+<%= for transaction <- @history do %>
+  <%= render "history.html", transaction: transaction %>
+<%= end %>

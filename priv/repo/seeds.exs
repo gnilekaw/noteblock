@@ -14,7 +14,7 @@
 #
 # Create the first block.
 #
-# note = Noteblock.Repo.get(Noteblock.Block, 1)
+# note = Noteblock.Repo.get(Noteblock.Transaction, 1)
 # data = Poison.encode(note.data)
 # :crypto.hash(:sha256, elem(data, 1)) |> Base.encode16
 # => "70D232BE2959744F734223E887BB35A16638A569F64E99D87F3BC674D660D743"
@@ -22,7 +22,7 @@
 # previous_hash = :crypto.hash(:sha256, elem(new_data, 1)) |> Base.encode16
 # => "6DD7E8E932EA9D58555D7FEE44A9B01A9BD7448E986636B728EE3711B01F37CE"
 
-Noteblock.Repo.insert!(%Noteblock.Block{
+Noteblock.Repo.insert!(%Noteblock.Transaction{
   data: %{
     "action" => "create",
     "note" => "hello world",
@@ -30,10 +30,10 @@ Noteblock.Repo.insert!(%Noteblock.Block{
   },
   hash: "70D232BE2959744F734223E887BB35A16638A569F64E99D87F3BC674D660D743",
   previous_hash: "6DD7E8E932EA9D58555D7FEE44A9B01A9BD7448E986636B728EE3711B01F37CE",
-  originating_block: "70D232BE2959744F734223E887BB35A16638A569F64E99D87F3BC674D660D743"
+  originating_hash: "70D232BE2959744F734223E887BB35A16638A569F64E99D87F3BC674D660D743"
 })
 
-# note = Noteblock.Repo.get(Noteblock.Block, 1)
+# note = Noteblock.Repo.get(Noteblock.Transaction, 1)
 # data = Poison.encode(note.data)
 # :crypto.hash(:sha256, elem(data, 1)) |> Base.encode16
 # => "70D232BE2959744F734223E887BB35A16638A569F64E99D87F3BC674D660D743"

@@ -1,11 +1,11 @@
-defmodule Noteblock.Block do
+defmodule Noteblock.Transaction do
   use Noteblock.Web, :model
 
-  schema "blocks" do
+  schema "transactions" do
     field :hash, :string
     field :previous_hash, :string
     field :data, :map
-    field :originating_block, :string
+    field :originating_hash, :string
 
     timestamps()
   end
@@ -15,8 +15,8 @@ defmodule Noteblock.Block do
   """
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:hash, :previous_hash, :data, :originating_block])
-    |> validate_required([:hash, :previous_hash, :data, :originating_block])
+    |> cast(params, [:hash, :previous_hash, :data, :originating_hash])
+    |> validate_required([:hash, :previous_hash, :data, :originating_hash])
     |> validate_number(:data)
     |> validate_action(:data)
   end
@@ -43,16 +43,16 @@ defmodule Noteblock.Block do
   end
 
   @doc """
-  Gets the last block from the chain.
+  Gets the last transaction from the chain.
   """
-  def last(block) do
-    from n in block, order_by: [desc: n.id], limit: 1
+  def last(transaction) do
+    from n in transaction, order_by: [desc: n.id], limit: 1
   end
 
   @doc """
-  Gets the last two blocks from the chain.
+  Gets the last two transactions from the chain.
   """
-  def last_two(block) do
-    from n in block, order_by: [desc: n.id], limit: 2
+  def last_two(transaction) do
+    from n in transaction, order_by: [desc: n.id], limit: 2
   end
 end

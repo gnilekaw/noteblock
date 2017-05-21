@@ -1,7 +1,0 @@
-<h2>Edit block</h2>
-
-<%= render "form.html", changeset: @changeset,
-                        disabled: @disabled,
-                        action: block_path(@conn, :update, @block) %>
-
-<%= link "Back", to: block_path(@conn, :index) %>
