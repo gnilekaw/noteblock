@@ -21,7 +21,7 @@ defmodule Noteblock.TransactionControllerTest do
 
   test "index displays a button for verifying the ledger", %{conn: conn} do
     conn = get conn, transaction_path(conn, :index)
-    assert html_response(conn, 200) =~ "Verify Ledger"
+    assert html_response(conn, 200) =~ "Verify ledger"
   end
 
   test "ledgers can be verified", %{conn: conn} do
@@ -61,7 +61,10 @@ defmodule Noteblock.TransactionControllerTest do
     }
 
     conn = post conn, transaction_path(conn, :create), transaction: @valid_transaction_attrs
-    assert redirected_to(conn) == transaction_path(conn, :index)
+
+    transaction = Transaction |> Transaction.last |> Repo.one
+
+    assert redirected_to(conn) == transaction_path(conn, :show, transaction.hash)
   end
 
   test "does not create resource and renders errors when data is invalid", %{conn: conn} do
@@ -135,7 +138,10 @@ defmodule Noteblock.TransactionControllerTest do
     }
 
     conn = put conn, transaction_path(conn, :update, transaction.hash), transaction: updates
-    assert redirected_to(conn) == transaction_path(conn, :index)
+
+    new_transaction = Transaction |> Transaction.last |> Repo.one
+
+    assert redirected_to(conn) == transaction_path(conn, :show, transaction.hash)
   end
 
   test "deletes a resource", %{conn: conn} do

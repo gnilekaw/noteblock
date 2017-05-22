@@ -49,10 +49,10 @@ defmodule Noteblock.TransactionController do
     changeset = Transaction.changeset(%Transaction{}, transaction)
 
     case Repo.insert(changeset) do
-      {:ok, _transaction} ->
+      {:ok, transaction} ->
         conn
         |> put_flash(:info, "Transaction created successfully.")
-        |> redirect(to: transaction_path(conn, :index))
+        |> redirect(to: transaction_path(conn, :show, transaction.hash))
       {:error, changeset} ->
         render(conn,
           "new.html",
@@ -122,7 +122,7 @@ defmodule Noteblock.TransactionController do
       {:ok, _transaction} ->
         conn
         |> put_flash(:info, "Transaction updated successfully.")
-        |> redirect(to: transaction_path(conn, :index))
+        |> redirect(to: transaction_path(conn, :show, transaction.hash))
       {:error, changeset} ->
         render(conn, "edit.html", transaction: transaction, changeset: changeset)
     end
