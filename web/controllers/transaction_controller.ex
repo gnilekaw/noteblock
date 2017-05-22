@@ -8,17 +8,6 @@ defmodule Noteblock.TransactionController do
     render(conn, "index.html", transactions: transactions)
   end
 
-  def verify_ledger(conn, _params) do
-    [transaction_1, transaction_2] = last_two_transactions()
-    # TODO: This only verifies TWO transactions, lol
-    status = case Hash.verify(transaction_1, transaction_2) do
-      true -> "Verified"
-      false -> "Errors"
-    end
-
-    render(conn, "verify_ledger.html", status: status)
-  end
-
   def new(conn, _params) do
     changeset = Transaction.changeset(%Transaction{})
     render(
@@ -26,6 +15,36 @@ defmodule Noteblock.TransactionController do
       "new.html",
       changeset: changeset,
       disabled: disabled_form(changeset.data.data)
+    )
+  end
+
+  def show(conn, %{"hash" => hash}) do
+    transaction = Repo.get_by!(Transaction, hash: hash)
+
+    query = from b in Transaction,
+      where: b.originating_hash == ^transaction.originating_hash,
+      order_by: [desc: b.id]
+
+    [transaction | history] = Repo.all(query)
+
+    render(
+      conn,
+      "show.html",
+      transaction: transaction,
+      history: history,
+      disabled: disabled_form(transaction.data)
+    )
+  end
+
+  def edit(conn, %{"hash" => hash}) do
+    transaction = Repo.get_by!(Transaction, hash: hash)
+    changeset = Transaction.changeset(transaction)
+    render(
+      conn,
+      "edit.html",
+      transaction: transaction.hash,
+      disabled: disabled_form(changeset.data.data),
+      changeset: changeset
     )
   end
 
@@ -59,43 +78,6 @@ defmodule Noteblock.TransactionController do
           changeset: changeset,
           disabled: disabled_form(changeset.data.data)
         )
-    end
-  end
-
-  def show(conn, %{"hash" => hash}) do
-    transaction = Repo.get_by!(Transaction, hash: hash)
-
-    query = from b in Transaction,
-      where: b.originating_hash == ^transaction.originating_hash,
-      order_by: [desc: b.id]
-
-    [transaction | history] = Repo.all(query)
-
-    render(
-      conn,
-      "show.html",
-      transaction: transaction,
-      history: history,
-      disabled: disabled_form(transaction.data)
-    )
-  end
-
-  def edit(conn, %{"hash" => hash}) do
-    transaction = Repo.get_by!(Transaction, hash: hash)
-    changeset = Transaction.changeset(transaction)
-    render(
-      conn,
-      "edit.html",
-      transaction: transaction.hash,
-      disabled: disabled_form(changeset.data.data),
-      changeset: changeset
-    )
-  end
-
-  defp disabled_form(data) do
-    case data["action"] do
-      "delete" -> %{edit_number: true, edit_note: true, submit: true}
-      _ -> %{edit_number: false, edit_note: false, submit: false}
     end
   end
 
@@ -158,6 +140,24 @@ defmodule Noteblock.TransactionController do
         |> redirect(to: transaction_path(conn, :index))
       {:error, changeset} ->
         render(conn, "edit.html", transaction: transaction, changeset: changeset)
+    end
+  end
+
+  def verify_ledger(conn, _params) do
+    [transaction_1, transaction_2] = last_two_transactions()
+    # TODO: This only verifies TWO transactions, lol
+    status = case Hash.verify(transaction_1, transaction_2) do
+      true -> "Verified"
+      false -> "Errors"
+    end
+
+    render(conn, "verify_ledger.html", status: status)
+  end
+
+  defp disabled_form(data) do
+    case data["action"] do
+      "delete" -> %{edit_number: true, edit_note: true, submit: true}
+      _ -> %{edit_number: false, edit_note: false, submit: false}
     end
   end
 
