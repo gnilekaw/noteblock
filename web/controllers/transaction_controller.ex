@@ -34,7 +34,7 @@ defmodule Noteblock.TransactionController do
 
     data = Map.put(transaction_params["data"], "action", "create")
 
-    {:ok, hash} = Hash.new %{
+    {:ok, hash} = Hash.new %Hash{
       previous_hash: previous_hash,
       data: data
     }
@@ -106,7 +106,7 @@ defmodule Noteblock.TransactionController do
 
     data = Map.put(transaction_params["data"], "action", "update")
 
-    {:ok, hash} = Hash.new %{
+    {:ok, hash} = Hash.new %Hash{
       previous_hash: previous_hash,
       data: data
     }
@@ -139,7 +139,7 @@ defmodule Noteblock.TransactionController do
       note: nil
     }
 
-    {:ok, hash} = Hash.new %{
+    {:ok, hash} = Hash.new %Hash{
       previous_hash: previous_hash,
       data: data
     }

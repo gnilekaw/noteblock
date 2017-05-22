@@ -3,28 +3,24 @@ defmodule Noteblock.HashTest do
 
   doctest Noteblock.Hash
 
-  alias Noteblock.Hash
-  alias Noteblock.Transaction
+  alias Noteblock.{Hash, Transaction}
 
   test "Hash.new creates a new hash with correct values" do
-    transaction = %{
+    transaction = %Hash{
       data: %{number: 1, note: "Foo"},
       previous_hash: "fake hash"
     }
 
     expected = {
       :ok,
-      "AA898DBE558D35DA696E12C3E708158D96DB09A46E3604542E01A7E0AFB292FE"
+      "D2F4CADB2F20EB2E7B7486DC9FB97AC2888D76536A1E0FDD6219DE5EBD14816A"
     }
 
     assert Hash.new(transaction) == expected
   end
 
   test "Hash.new returns an error when any values are nil" do
-    map = %{
-      data: nil,
-      previous_hash: nil
-    }
+    map = %Hash{}
 
     expected = {:error, "Nil keys are not allowed"}
 
@@ -40,7 +36,7 @@ defmodule Noteblock.HashTest do
 
     data = "Heap'o JSON"
 
-    {:ok, hash} = Hash.new(%{
+    {:ok, hash} = Hash.new(%Hash{
       previous_hash: transaction_2_hash,
       data: data
     })

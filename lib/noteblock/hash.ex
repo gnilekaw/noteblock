@@ -1,4 +1,11 @@
 defmodule Noteblock.Hash do
+  defstruct [
+    previous_hash: nil,
+    data: nil
+  ]
+
+  alias Noteblock.Hash
+
   @doc """
     Creates a sha256 hash.
 
@@ -20,28 +27,24 @@ defmodule Noteblock.Hash do
   @doc """
     Creates a shasum from a JSON-encoded block.
   """
-  def new(%{previous_hash: p, data: d}) do
-    empty_value = [p, d] |> Enum.any?(&is_nil/1)
-
-    if empty_value do
-      {:error, "Nil keys are not allowed"}
-    else
-      shasum = [p, d] |> Poison.encode |> sha256
-
-      {:ok, shasum}
+  def new(%Hash{} = data) do
+    case data |> Map.values |> Enum.any?(&is_nil/1) do
+      false ->
+        shasum = data |> Poison.encode |> sha256
+        {:ok, shasum}
+      true -> {:error, "Nil keys are not allowed"}
     end
   end
 
   def verify(block_1, block_2) do
-    previous_hash_matches = block_1.previous_hash == block_2.hash
-
-    {:ok, block_1_hash} = new(%{
+    {:ok, block_1_hash} = new(%Hash{
       previous_hash: block_1.previous_hash,
       data: block_1.data
     })
 
     current_hash_matches = block_1.hash == block_1_hash
+    previous_hash_matches = block_1.previous_hash == block_2.hash
 
-    (previous_hash_matches && current_hash_matches)
+    (current_hash_matches and previous_hash_matches)
   end
 end

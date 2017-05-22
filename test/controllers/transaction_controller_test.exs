@@ -139,8 +139,6 @@ defmodule Noteblock.TransactionControllerTest do
 
     conn = put conn, transaction_path(conn, :update, transaction.hash), transaction: updates
 
-    new_transaction = Transaction |> Transaction.last |> Repo.one
-
     assert redirected_to(conn) == transaction_path(conn, :show, transaction.hash)
   end
 
