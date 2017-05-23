@@ -59,10 +59,10 @@ defmodule Noteblock.TransactionController do
     }
 
     transaction = %{
-      data: data,
-      previous_hash: previous_hash,
       hash: hash,
-      originating_hash: hash
+      previous_hash: previous_hash,
+      originating_hash: hash,
+      data: data
     }
 
     changeset = Transaction.changeset(%Transaction{}, transaction)
@@ -110,8 +110,8 @@ defmodule Noteblock.TransactionController do
     end
   end
 
-  def delete(conn, %{"hash" => id}) do
-    transaction = Repo.get_by! Transaction, hash: id
+  def delete(conn, %{"hash" => hash}) do
+    transaction = Repo.get_by! Transaction, hash: hash
 
     %{hash: previous_hash} = last_transaction()
 
@@ -127,9 +127,9 @@ defmodule Noteblock.TransactionController do
     }
 
     changeset = Transaction.changeset(%Transaction{
-      originating_hash: transaction.originating_hash,
-      previous_hash: previous_hash,
       hash: hash,
+      previous_hash: previous_hash,
+      originating_hash: transaction.originating_hash,
       data: data
     })
 
